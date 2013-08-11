@@ -4,7 +4,6 @@ import (
 	"github.com/tarm/goserial"
   "bitbucket.org/shanehanna/mosquitto"
 	"log"
-	"time"
 	"io"
   "regexp"
 )
@@ -26,7 +25,7 @@ func serialReader(serialPort *io.ReadWriteCloser , line *chan<- *string ) {
 
 
 func main() {
-	c := &serial.Config{Name: "/dev/ttyUSB0", Baud: 9600}
+	c := &serial.Config{Name: "/dev/ttyUSB1", Baud: 9600}
 	s, err := serial.OpenPort(c)
 	if err != nil {
 		log.Fatal(err)
@@ -62,15 +61,6 @@ func main() {
   if err != nil {
     log.Fatal(err)
   }
-
-	time.Sleep(2000 * time.Millisecond)
-
-	_, err = s.Write([]byte("RF  A2off\n"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	time.Sleep(2000 * time.Millisecond)
 
   // Just wait at the end
   end := make(chan bool, 1)
