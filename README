@@ -2,3 +2,5 @@ You are going to need the mosquito libraries
 
 
 http://mosquitto.org/2013/01/mosquitto-debian-repository/
+
+mosquitto_pub -h 192.168.1.105 -t /homeauto/power/A2 -m on
