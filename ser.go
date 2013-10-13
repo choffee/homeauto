@@ -1,14 +1,15 @@
 package main
 
 import (
+  "flag"
+  "fmt"
 	"github.com/tarm/goserial"
+	"io"
 	"log"
 	"time"
-	"io"
 )
 
-
-func serialReader(serialPort *io.ReadWriteCloser , line *chan<- *string ) {
+func serialReader(serialPort *io.ReadWriteCloser, line *chan<- *string) {
 	// Reads continuisly from a serial port and sends whole line back
 	buf := make([]byte, 128)
 	for {
@@ -17,14 +18,18 @@ func serialReader(serialPort *io.ReadWriteCloser , line *chan<- *string ) {
 			log.Fatal(err)
 			break
 		}
-		log.Printf("%q", buf[n])
-        }
+    log.Printf("byte:%q", buf[n])
+	}
 
 }
 
-
 func main() {
-	c := &serial.Config{Name: "/dev/ttyUSB1", Baud: 9600}
+
+  var usbdev = flag.String("usb", "/dev/ttyUSB0", "The USB Device")
+  var command = flag.String("command", "on", "The command")
+  flag.Parse()
+
+	c := &serial.Config{Name: *usbdev, Baud: 9600}
 	s, err := serial.OpenPort(c)
 	if err != nil {
 		log.Fatal(err)
@@ -36,7 +41,7 @@ func main() {
 
 	time.Sleep(2000 * time.Millisecond)
 
-	_, err = s.Write([]byte("RF  A2off\n"))
+	_, err = s.Write([]byte(fmt.Sprintf("RF  A2%s\n", *command)))
 	if err != nil {
 		log.Fatal(err)
 	}
