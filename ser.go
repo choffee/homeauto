@@ -27,6 +27,7 @@ func main() {
 
   var usbdev = flag.String("usb", "/dev/ttyUSB0", "The USB Device")
   var command = flag.String("command", "on", "The command")
+  var device = flag.String("device", "A2", "The device to switch")
   flag.Parse()
 
 	c := &serial.Config{Name: *usbdev, Baud: 9600}
@@ -41,7 +42,7 @@ func main() {
 
 	time.Sleep(2000 * time.Millisecond)
 
-	_, err = s.Write([]byte(fmt.Sprintf("RF  A2%s\n", *command)))
+	_, err = s.Write([]byte(fmt.Sprintf("RF  %s%s\n", *device, *command)))
 	if err != nil {
 		log.Fatal(err)
 	}
